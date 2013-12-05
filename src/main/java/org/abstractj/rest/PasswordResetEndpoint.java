@@ -12,6 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -48,7 +49,7 @@ public class PasswordResetEndpoint {
     @Path("/reset")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void reset(@QueryParam("id") String id) {
+    public Response reset(@QueryParam("id") String id) {
 
         Token token = tokenService.findTokenById(id);
 
@@ -57,9 +58,11 @@ public class PasswordResetEndpoint {
             //If yes, we need to redirect use to the login page
             //After user update the password, disable that token
             tokenService.disable(id);
-            Response.status(Response.Status.OK);
+            return Response.status(Response.Status.OK)
+                    .type(MediaType.TEXT_PLAIN)
+                    .entity("Yay!").build();
         } else {
-            Response.status(Response.Status.BAD_REQUEST);
+            return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
 
