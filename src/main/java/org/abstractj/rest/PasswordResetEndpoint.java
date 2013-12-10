@@ -4,6 +4,7 @@ import org.abstractj.api.ExpirationTime;
 import org.abstractj.fixture.UserService;
 import org.abstractj.model.Token;
 import org.abstractj.service.TokenService;
+import org.abstractj.util.ResponseUtil;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -14,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -34,8 +34,7 @@ public class PasswordResetEndpoint {
     @GET
     @Path("/forgot")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response forgot(String email) {
+    public Response forgot(@QueryParam("email") String email) {
 
         Token token;
 
@@ -45,9 +44,7 @@ public class PasswordResetEndpoint {
             userService.send(uri(token.getId()));
         }
         //It' base64 encoded but also can be an Hex
-        return Response.status(Response.Status.OK)
-                .type(MediaType.TEXT_PLAIN)
-                .entity("Reset instructions sent!").build();
+        return new ResponseUtil().ok(String.format("Instructions sent to %s", email));
     }
 
     @POST
