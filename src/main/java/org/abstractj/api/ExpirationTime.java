@@ -11,6 +11,7 @@ public class ExpirationTime {
 
     public ExpirationTime() {
         calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+        this.expirationDate = add(1);
     }
 
     public ExpirationTime(int expirationDate) {

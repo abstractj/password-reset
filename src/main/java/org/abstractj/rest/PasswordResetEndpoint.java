@@ -1,11 +1,13 @@
 package org.abstractj.rest;
 
 import org.abstractj.api.ExpirationTime;
+import org.abstractj.fixture.UserService;
 import org.abstractj.model.Token;
 import org.abstractj.service.TokenService;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -25,24 +27,27 @@ public class PasswordResetEndpoint {
     @Inject
     private TokenService tokenService;
     @Inject
+    private UserService userService;
+    @Inject
     private ExpirationTime expirationTime;
 
-    @POST
+    @GET
     @Path("/forgot")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public String forgot(String email) {
+    public Response forgot(String email) {
 
-        Token token = null;
-        int hours = 1;
+        Token token;
 
         //Here of course we need to validate the e-mail against the database or PicketLink
-        if (email != null || !email.isEmpty()) {
-            ExpirationTime expirationTime = new ExpirationTime(hours);
-            token = tokenService.generate(expirationTime);
+        if (userService.userExists(email)) {
+            token = tokenService.generate(new ExpirationTime());
+            userService.send(uri(token.getId()));
         }
         //It' base64 encoded but also can be an Hex
-        return uri(token.getId());
+        return Response.status(Response.Status.OK)
+                .type(MediaType.TEXT_PLAIN)
+                .entity("Reset instructions sent!").build();
     }
 
     @POST
