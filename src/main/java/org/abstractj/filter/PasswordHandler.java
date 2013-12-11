@@ -37,6 +37,7 @@ public class PasswordHandler implements Filter {
 
         if (isNotEmpty(email)) {
             tokenService.send(email);
+            httpServletResponse.setStatus(HttpServletResponse.SC_NO_CONTENT);
         } else if (isNotEmpty(tokenId) && tokenService.isValid(tokenId)) {
             redirectPage(httpServletRequest, httpServletResponse);
         } else {

@@ -19,8 +19,7 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
               $("#reset-page").html( email );
             },
             error: function (jqXHR, textStatus, errorThrown) {
-              $("#reset-page").html( email );
-
+              console.log("Oh noes! " + textStatus);
             }
         });
       };
