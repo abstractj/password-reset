@@ -21,7 +21,7 @@ if ( !jQuery.migrateMute && window.console && console.log ) {
 	console.log("JQMIGRATE: Logging is active");
 }
 
-// Set to false to disable traces that appear with warnings
+// Set to false to destroy traces that appear with warnings
 if ( jQuery.migrateTrace === undefined ) {
 	jQuery.migrateTrace = true;
 }

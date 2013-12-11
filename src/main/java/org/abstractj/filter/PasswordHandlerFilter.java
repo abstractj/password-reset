@@ -25,8 +25,6 @@ public class PasswordHandlerFilter implements Filter {
 
     @Inject
     private PasswordService passwordService;
-    @Inject
-    private ExpirationTime expirationTime;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -64,6 +62,8 @@ public class PasswordHandlerFilter implements Filter {
     private void resetPassword(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
         httpServletRequest.getRequestDispatcher("/reset/update.html").forward(httpServletRequest, httpServletResponse);
+
+        //When submited token must be destroyed
     }
 
     @Override

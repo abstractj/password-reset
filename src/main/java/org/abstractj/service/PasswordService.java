@@ -36,7 +36,7 @@ public class PasswordService {
     }
 
 
-    public void disable(String id) {
+    public void destroy(String id) {
         try {
             Token token = em.find(Token.class, id);
             token.setUsed(true);
