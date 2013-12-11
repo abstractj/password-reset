@@ -19,9 +19,9 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 @WebFilter({"/reset/*", "/forgot/*"})
-public class PasswordHandlerFilter implements Filter {
+public class PasswordHandler implements Filter {
 
-    private static Logger LOGGER = Logger.getLogger(PasswordHandlerFilter.class.getSimpleName());
+    private static Logger LOGGER = Logger.getLogger(PasswordHandler.class.getSimpleName());
 
     @Inject
     private PasswordService passwordService;
@@ -41,7 +41,7 @@ public class PasswordHandlerFilter implements Filter {
 
         if (email != null) {
             tokenValidation(email);
-        } else if (tokenId != null) {
+        } else if (tokenId != null && passwordService.isValid(tokenId)) {
             resetPassword(httpServletRequest, httpServletResponse);
         } else {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
