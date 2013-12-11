@@ -1,9 +1,10 @@
 package org.abstractj.service;
 
 import org.abstractj.api.ExpirationTime;
+import org.abstractj.fixture.FakeUserService;
 import org.abstractj.model.Token;
+import org.abstractj.util.Configuration;
 
-import javax.ejb.EJBException;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -21,7 +22,7 @@ public class PasswordService {
     @Inject
     private ExpirationTime expirationTime;
 
-    public Token generate(ExpirationTime expiration) {
+    private Token generate(ExpirationTime expiration) {
 
         Token token = null;
         try {
@@ -52,23 +53,24 @@ public class PasswordService {
         return (token != null && !expirationTime.isExpired(token.getExpiration()));
     }
 
-    //Fake service to validate the user against the database
-    public boolean userExists(String email){
-        return (email != null || !email.isEmpty());
-    }
-
     //Send to some place the url for password reset
-    public void send(String uri) {
-        LOGGER.info("Sending password reset instructions");
-        LOGGER.info("===================================");
-        LOGGER.info(uri);
-        LOGGER.info("===================================");
+    public void send(String email) {
 
+        Token token;
+
+        //Here of course we need to validate the e-mail against the database or PicketLink
+        if (FakeUserService.userExists(email)) {
+            token = generate(new ExpirationTime());
+            LOGGER.info("Sending password reset instructions");
+            LOGGER.info("===================================");
+            LOGGER.info(Configuration.uri(token.getId()));
+            LOGGER.info("===================================");
+        }
     }
 
     private Token findTokenById(String id) {
 
-        Token token;
+        Token token = null;
         try {
             token = em.createQuery("SELECT t FROM Token t WHERE t.id = :id and t.used = :used", Token.class)
                     .setParameter("id", id)
@@ -76,7 +78,7 @@ public class PasswordService {
                     .getSingleResult();
 
         } catch (NoResultException e) {
-            throw new RuntimeException("Not valid");
+            //Do nothing atm because we don't want to give any clue to an attacker
         }
 
         return token;

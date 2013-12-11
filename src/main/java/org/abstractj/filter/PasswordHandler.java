@@ -1,9 +1,7 @@
 package org.abstractj.filter;
 
-import org.abstractj.api.ExpirationTime;
-import org.abstractj.model.Token;
 import org.abstractj.service.PasswordService;
-import org.abstractj.util.URLUtil;
+import org.abstractj.util.Configuration;
 
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -12,23 +10,21 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Logger;
 
-@WebFilter({"/reset/*", "/forgot/*"})
 public class PasswordHandler implements Filter {
 
-    private static Logger LOGGER = Logger.getLogger(PasswordHandler.class.getSimpleName());
+    private static final String EMAIL_PARAM = "email";
+    public static final String TOKEN_ID_PARAM = "id";
 
     @Inject
     private PasswordService passwordService;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
-        //TODO
+        Configuration.loadFilterConfig(config);
     }
 
     @Override
@@ -36,38 +32,33 @@ public class PasswordHandler implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
-        String email = httpServletRequest.getParameter("email");
-        String tokenId = httpServletRequest.getParameter("id");
+        String email = httpServletRequest.getParameter(EMAIL_PARAM);
+        String tokenId = httpServletRequest.getParameter(TOKEN_ID_PARAM);
 
-        if (email != null) {
-            tokenValidation(email);
-        } else if (tokenId != null && passwordService.isValid(tokenId)) {
-            resetPassword(httpServletRequest, httpServletResponse);
+        if (isNotEmpty(email)) {
+            passwordService.send(email);
+        } else if (isNotEmpty(tokenId) && passwordService.isValid(tokenId)) {
+            redirectPage(httpServletRequest, httpServletResponse);
         } else {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
             return;
         }
     }
 
-    private void tokenValidation(String email) {
-        Token token;
+    private void redirectPage(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
 
-        //Here of course we need to validate the e-mail against the database or PicketLink
-        if (passwordService.userExists(email)) {
-            token = passwordService.generate(new ExpirationTime());
-            passwordService.send(URLUtil.uri(token.getId()));
-        }
-    }
+        httpServletRequest.getRequestDispatcher(Configuration.getRedirectPage()).forward(httpServletRequest, httpServletResponse);
 
-    private void resetPassword(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-
-        httpServletRequest.getRequestDispatcher("/reset/update.html").forward(httpServletRequest, httpServletResponse);
-
-        //When submited token must be destroyed
+        //TODO When submited token must be destroyed
     }
 
     @Override
     public void destroy() {
+    }
+
+
+    private boolean isNotEmpty(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 
 }
