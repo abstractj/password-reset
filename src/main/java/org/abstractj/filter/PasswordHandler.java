@@ -13,11 +13,14 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class PasswordHandler implements Filter {
 
     private static final String EMAIL_PARAM = "email";
     public static final String TOKEN_ID_PARAM = "id";
+
+    private static final Logger LOGGER = Logger.getLogger(PasswordHandler.class.getSimpleName());
 
     @Inject
     private TokenService tokenService;
