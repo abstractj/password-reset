@@ -1,7 +1,7 @@
-package org.abstractj.filter;
+package org.abstractj.api.filter;
 
-import org.abstractj.service.TokenService;
-import org.abstractj.util.Configuration;
+import org.abstractj.api.service.TokenService;
+import org.abstractj.api.util.Configuration;
 
 import javax.inject.Inject;
 import javax.servlet.Filter;
@@ -13,14 +13,10 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.logging.Logger;
 
 public class PasswordHandler implements Filter {
 
-    private static final String EMAIL_PARAM = "email";
     public static final String TOKEN_ID_PARAM = "id";
-
-    private static final Logger LOGGER = Logger.getLogger(PasswordHandler.class.getSimpleName());
 
     @Inject
     private TokenService tokenService;
@@ -35,20 +31,12 @@ public class PasswordHandler implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
-        String email = httpServletRequest.getParameter(EMAIL_PARAM);
         String tokenId = httpServletRequest.getParameter(TOKEN_ID_PARAM);
 
         String method = httpServletRequest.getMethod();
-        LOGGER.info("Intercepting the request " + method);
 
-        if (isNotEmpty(email)) {
-            tokenService.send(email);
-            httpServletResponse.setStatus(HttpServletResponse.SC_NO_CONTENT);
-        } else if (isNotEmpty(tokenId) && tokenService.isValid(tokenId) && method.equalsIgnoreCase("GET")) {
+        if (tokenService.isValid(tokenId) && method.equalsIgnoreCase("GET")) {
             redirectPage(httpServletRequest, httpServletResponse);
-        } else if ((isNotEmpty(tokenId) && method.equalsIgnoreCase("POST"))) {
-            httpServletResponse.setStatus(HttpServletResponse.SC_NO_CONTENT);
-            LOGGER.info("Yay");
         } else {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
             return;
@@ -64,11 +52,6 @@ public class PasswordHandler implements Filter {
 
     @Override
     public void destroy() {
-    }
-
-
-    private boolean isNotEmpty(String value) {
-        return value != null && !value.trim().isEmpty();
     }
 
 }

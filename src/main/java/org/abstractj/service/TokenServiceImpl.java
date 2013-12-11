@@ -2,9 +2,10 @@ package org.abstractj.service;
 
 import org.abstractj.api.ExpirationTime;
 import org.abstractj.api.ResetToken;
+import org.abstractj.api.service.TokenService;
 import org.abstractj.fixture.FakeUserService;
 import org.abstractj.model.Token;
-import org.abstractj.util.Configuration;
+import org.abstractj.api.util.Configuration;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -81,6 +82,11 @@ public class TokenServiceImpl implements TokenService {
         }
 
         return token;
+    }
+
+
+    private boolean isNotEmpty(String value) {
+        return value != null && !value.trim().isEmpty();
     }
 
 }

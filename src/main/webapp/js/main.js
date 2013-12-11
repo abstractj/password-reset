@@ -7,7 +7,7 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
           {
               name: "forgot",
               settings: {
-                  baseURL: "http://localhost:8080/password-reset/"
+                  baseURL: "http://localhost:8080/password-reset/rest/"
               }
           }
       ]).pipes.forgot;

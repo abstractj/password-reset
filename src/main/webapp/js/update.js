@@ -25,28 +25,29 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
 
             var updatePipeline = AeroGear.Pipeline([
                 {
-                    name: "update",
+                    name: "reset",
                     settings: {
-                        baseURL: "http://localhost:8080/password-reset/"
+                        baseURL: "http://localhost:8080/password-reset/rest/"
                     }
                 }
-            ]).pipes.update;
+            ]).pipes.reset;
 
             var update = function ( email, password, confirmation ) {
                 updatePipeline.save({
-                        id : token,
+                        token : token,
                         email: email,
                         password: password,
                         confirmation: confirmation
                     },
-                    success: function( data ) {
-                        console.log("Yay it works" + data);
-                        $("#update-page").html( email );
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.log("Oh noes! " + textStatus);
-                        console.log("\n" + errorThrown);
-
+                    {
+                        success: function( data ) {
+                            console.log("Yay it works" + data);
+                            $("#update-page").html( email );
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log("Oh noes! " + textStatus);
+                            console.log("\n" + errorThrown);
+                        }
                     });
             };
 

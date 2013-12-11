@@ -1,4 +1,4 @@
-package org.abstractj.service;
+package org.abstractj.api.service;
 
 public interface TokenService {
     void destroy(String id);

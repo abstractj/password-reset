@@ -1,4 +1,4 @@
-package org.abstractj.util;
+package org.abstractj.api.util;
 
 import javax.servlet.FilterConfig;
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package org.abstractj.api;
 
-import org.abstractj.util.Configuration;
+import org.abstractj.api.util.Configuration;
 import org.bouncycastle.util.encoders.Base64;
 import org.jboss.aerogear.AeroGearCrypto;
 import org.jboss.aerogear.crypto.Random;

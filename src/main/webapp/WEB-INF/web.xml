@@ -21,7 +21,7 @@
 
     <filter>
         <filter-name>PasswordHandler</filter-name>
-        <filter-class>org.abstractj.filter.PasswordHandler</filter-class>
+        <filter-class>org.abstractj.api.filter.PasswordHandler</filter-class>
         <init-param>
             <param-name>url</param-name>
             <param-value>http://localhost:8080/password-reset/</param-value>
@@ -37,7 +37,6 @@
         <filter-name>PasswordHandler</filter-name>
         <url-pattern>/reset/*</url-pattern>
         <url-pattern>/forgot/*</url-pattern>
-        <url-pattern>/update/*</url-pattern>
     </filter-mapping>
 
 </web-app>

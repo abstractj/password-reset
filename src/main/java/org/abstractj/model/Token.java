@@ -1,22 +1,9 @@
 package org.abstractj.model;
 
 import org.abstractj.api.ExpirationTime;
-import org.abstractj.util.Configuration;
-import org.bouncycastle.util.encoders.Base64;
-import org.jboss.aerogear.AeroGearCrypto;
-import org.jboss.aerogear.crypto.Random;
-import org.jboss.aerogear.crypto.password.Pbkdf2;
 
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.inject.Inject;
 import javax.persistence.Entity;
-import javax.persistence.EntityManager;
 import javax.persistence.Id;
-import javax.persistence.NoResultException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
 @Entity
 public class Token {
