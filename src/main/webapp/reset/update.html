@@ -16,15 +16,16 @@
     <h1>Password reset</h1>
     <p>E-mail:</p>
     <input id="email" type="text" placeholder="john@doe.com"/>
-
+    <p>Password:</p>
     <input id="password" type="password" placeholder=""/>
+    <p>Password confirmation:</p>
     <input id="confirmation" type="password" placeholder=""/>
     <p></p>
-    <input id="update-button" type="submit" value="Update" />
+    <input id="update-button" type="submit" value="Send" />
 </div>
 
 <script type="text/template" id="reset-info-template">
-    <h1>Yay congrats!</h1>
+    <h1>Yay congrats! <em><%= email %></em></h1>
 </script>
 <script data-main="../js/app" src="../js/components/requirejs/require.js"></script>
 

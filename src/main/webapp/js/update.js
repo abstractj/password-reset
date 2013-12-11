@@ -6,7 +6,7 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
             //taken from https://developers.google.com/accounts/docs/OAuth2Login
             // First, parse the query string
             var params = {},
-                queryString = locationString.substr( locationString.indexOf( "#" ) + 1 ),
+                queryString = locationString.substr( locationString.indexOf( "?" ) + 1 ),
                 regex = /([^&=]+)=([^&]*)/g,
                 m;
             while ( ( m = regex.exec(queryString) ) ) {
@@ -15,11 +15,11 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
             return params;
         };
 
-        var queryString = parseQueryString(location.search);
+        var token = parseQueryString(window.location.search).id;
 
-        console.log("Query string: " + queryString);
+        console.log("Query string: " + token);
 
-        if(queryString) {
+        if(token) {
 
             var info = _.template( $("#reset-info-template").text() );
 
@@ -32,23 +32,33 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
                 }
             ]).pipes.reset;
 
-            var reset = function ( token ) {
-                resetPipeline.save({
-                    query: {id : token},
-                    success: function( ) {
-                        console.log("Yay it works");
+            var reset = function ( email, password, confirmation ) {
+                resetPipeline.save( token, {
+                    query: {
+                        id : token,
+                        email: email,
+                        password: password,
+                        confirmation: confirmation
+                    },
+                    success: function( data ) {
+                        console.log("Yay it works" + data);
                         $("#update-page").html( email );
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Oh noes! " + textStatus);
+                        console.log("\n" + errorThrown);
+
                     }
                 });
             };
 
             $( "#update-button" ).click( function() {
+                var email = info( {'email': $("#email").val()}),
+                    password = info( {'password': $("#password").val()}),
+                    confirmation = info( {'confirmation': $("#confirmation").val()} );
 
-                console.log("Click");
-                info ( queryString );
+
+                reset ( token );
             });
         }
 
