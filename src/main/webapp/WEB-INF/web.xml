@@ -37,6 +37,7 @@
         <filter-name>PasswordHandler</filter-name>
         <url-pattern>/reset/*</url-pattern>
         <url-pattern>/forgot/*</url-pattern>
+        <url-pattern>/update/*</url-pattern>
     </filter-mapping>
 
 </web-app>

@@ -23,18 +23,17 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
 
             var info = _.template( $("#reset-info-template").text() );
 
-            var resetPipeline = AeroGear.Pipeline([
+            var updatePipeline = AeroGear.Pipeline([
                 {
-                    name: "reset",
+                    name: "update",
                     settings: {
                         baseURL: "http://localhost:8080/password-reset/"
                     }
                 }
-            ]).pipes.reset;
+            ]).pipes.update;
 
-            var reset = function ( email, password, confirmation ) {
-                resetPipeline.save( token, {
-                    query: {
+            var update = function ( email, password, confirmation ) {
+                updatePipeline.save({
                         id : token,
                         email: email,
                         password: password,
@@ -48,8 +47,7 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
                         console.log("Oh noes! " + textStatus);
                         console.log("\n" + errorThrown);
 
-                    }
-                });
+                    });
             };
 
             $( "#update-button" ).click( function() {
@@ -57,8 +55,7 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
                     password = info( {'password': $("#password").val()}),
                     confirmation = info( {'confirmation': $("#confirmation").val()} );
 
-
-                reset ( token );
+                    update(email, password, confirmation);
             });
         }
 
