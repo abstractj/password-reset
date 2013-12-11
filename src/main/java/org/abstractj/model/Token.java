@@ -9,8 +9,11 @@ import org.jboss.aerogear.crypto.password.Pbkdf2;
 
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
+import javax.inject.Inject;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.Id;
+import javax.persistence.NoResultException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -26,34 +29,14 @@ public class Token {
 
     public Token(){}
 
-    public Token(ExpirationTime expirationTime) {
-        this.id = generateToken();
+    public Token(String id, ExpirationTime expirationTime) {
+        this.id = id;
         this.sentAt = expirationTime.getCurrentTime();
         this.expiration = expirationTime.getExpirationDate();
     }
 
-    private String generateToken() {
-
-        Pbkdf2 pbkdf2 = AeroGearCrypto.pbkdf2();
-        String secret = Configuration.getSecret();
-
-        Mac mac = null;
-        try {
-            SecretKey secretKey = pbkdf2.generateSecretKey(secret);
-            mac = Mac.getInstance(HMAC_SHA256_ALGORITHM);
-            mac.init(secretKey);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-        } catch (InvalidKeyException e) {
-            e.printStackTrace();
-        }
-
-        byte[] rawHmac = mac.doFinal(new Random().randomBytes());
-
-        return new String(Base64.encode(rawHmac));
-
+    public Token(String id) {
+        this(id, new ExpirationTime());
     }
 
 
@@ -88,7 +71,4 @@ public class Token {
     public void setUsed(Boolean used) {
         this.used = true;
     }
-
-    private static final String HMAC_SHA256_ALGORITHM = "HmacSHA256";
-
 }

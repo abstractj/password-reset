@@ -1,6 +1,6 @@
 package org.abstractj.filter;
 
-import org.abstractj.service.PasswordService;
+import org.abstractj.service.TokenService;
 import org.abstractj.util.Configuration;
 
 import javax.inject.Inject;
@@ -20,7 +20,7 @@ public class PasswordHandler implements Filter {
     public static final String TOKEN_ID_PARAM = "id";
 
     @Inject
-    private PasswordService passwordService;
+    private TokenService tokenService;
 
     @Override
     public void init(FilterConfig config) throws ServletException {
@@ -36,8 +36,8 @@ public class PasswordHandler implements Filter {
         String tokenId = httpServletRequest.getParameter(TOKEN_ID_PARAM);
 
         if (isNotEmpty(email)) {
-            passwordService.send(email);
-        } else if (isNotEmpty(tokenId) && passwordService.isValid(tokenId)) {
+            tokenService.send(email);
+        } else if (isNotEmpty(tokenId) && tokenService.isValid(tokenId)) {
             redirectPage(httpServletRequest, httpServletResponse);
         } else {
             httpServletResponse.sendError(HttpServletResponse.SC_NOT_FOUND, "Not found");
