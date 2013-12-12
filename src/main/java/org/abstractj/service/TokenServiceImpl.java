@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.logging.Logger;
 
 @Stateless
@@ -62,14 +63,16 @@ public class TokenServiceImpl implements TokenService {
         if (FakeService.userExists(email)) {
 
             String secret = Configuration.getSecret();
-            Hmac hmac = new Hmac(secret);
             try {
+                Hmac hmac = new Hmac(secret);
                 token = save(hmac.digest());
                 LOGGER.info("Sending password reset instructions");
                 LOGGER.info("===================================");
                 LOGGER.info(Configuration.uri(token.getId()));
                 LOGGER.info("===================================");
             } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (InvalidKeySpecException e) {
                 e.printStackTrace();
             }
         }
