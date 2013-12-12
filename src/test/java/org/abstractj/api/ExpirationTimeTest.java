@@ -4,7 +4,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -15,20 +17,18 @@ public class ExpirationTimeTest {
 
     @Before
     public void setUp() throws Exception {
-        expirationTime = new ExpirationTime(1);
+        expirationTime = new ExpirationTime();
     }
 
     @Test
-    public void testAdd() throws Exception {
-        ExpirationTime expirationTime = new ExpirationTime(2);
-        assertFalse(expirationTime.isExpired(expirationTime.getCurrentTime()));
+    public void testTimeStillValid() throws Exception {
+        long time = expirationTime.add(1);
+        assertFalse("One hour should be added", expirationTime.isExpired(time));
     }
 
     @Test
-    public void testIsExpired() throws Exception {
-        ExpirationTime expirationTime = new ExpirationTime();
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.set(2009, 11, 10);
-        assertTrue(expirationTime.isExpired(calendar.getTimeInMillis()));
+    public void testTimeHasExpired() throws Exception {
+        long time = expirationTime.add(-7);
+        assertTrue("One hour should be added", expirationTime.isExpired(time));
     }
 }

@@ -22,13 +22,13 @@ public class ExpirationTime {
     }
 
     public boolean isExpired(long time) {
-        return calendar.after(getCalendar(time));
+        return calendar.after(newCalendar(time));
     }
 
-    private Calendar getCalendar(long time) {
-        Calendar comparison = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
-        comparison.setTimeInMillis(time);
-        return comparison;
+    private Calendar newCalendar(long time) {
+        Calendar newCalendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+        newCalendar.setTimeInMillis(time);
+        return newCalendar;
     }
 
 }
