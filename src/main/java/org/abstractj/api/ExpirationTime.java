@@ -6,40 +6,27 @@ import java.util.TimeZone;
 
 public class ExpirationTime {
 
-    private final Calendar calendar;
-    private long expirationDate;
+    private Calendar current;
+    private Calendar future;
+
 
     public ExpirationTime() {
-        calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
-        this.expirationDate = add(1);
-    }
-
-    public ExpirationTime(int expirationDate) {
-        this();
-        this.expirationDate = add(expirationDate);
+        current = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
+        future = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
     }
 
     public long getCurrentTime() {
-        return calendar.getTimeInMillis();
+        return current.getTimeInMillis();
     }
 
     public long add(int hours) {
-        calendar.add(Calendar.HOUR_OF_DAY, hours);
-        return calendar.getTimeInMillis();
+        future.add(Calendar.HOUR_OF_DAY, hours);
+        return future.getTimeInMillis();
     }
 
     public boolean isExpired(long time) {
-        return calendar.after(getCalendar(time));
-    }
-
-    private Calendar getCalendar(long time) {
-        Calendar comparison = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
-        comparison.setTimeInMillis(time);
-        return comparison;
-    }
-
-    public long getExpirationDate() {
-        return expirationDate;
+        future.setTimeInMillis(time);
+        return current.after(future);
     }
 
 }

@@ -1,0 +1,89 @@
+{
+  "name": "aerogear",
+  "title": "AeroGear JavaScript Library",
+  "description": "Provides a lightweight set of utilities for communication, security, storage and more.",
+  "homepage": "https://github.com/aerogear/aerogear-js",
+  "author": {
+    "name": "Red Hat, Inc.",
+    "url": "http://aerogear.org"
+  },
+  "maintainers": {
+    "name": "Lucas Holmquist",
+    "email": "lholmqui@redhat.com"
+  },
+  "contributors": [
+    {
+      "name": "Kris Borchers",
+      "url": "http://twitter.com/kborchers"
+    },
+    {
+      "name": "Lucas Holmquist",
+      "url": "http://twitter.com/sienaluke"
+    },
+    {
+      "name": "Bruno Oliveira",
+      "url": "http://twitter.com/abstractj"
+    },
+    {
+      "name": "Matthias Wessendorf",
+      "url": "http://twitter.com/mwessendorf"
+    },
+    {
+      "name": "Daniel Bevenius",
+      "url": "http://twitter.com/dbevenius"
+    },
+    {
+      "name": "Douglas Campos",
+      "url": "http://twitter.com/qmx"
+    },
+    {
+      "name": "Sebastien Blanc",
+      "url": "http://twitter.com/sebi2706"
+    },
+    {
+      "name": "Jay Balunas",
+      "url": "http://twitter.com/tech4j"
+    },
+    {
+      "name": "Christos Vasilakis",
+      "url": "http://twitter.com/cvasilak"
+    },
+    {
+      "name": "Yavuz Yilmaz",
+      "url": "https://github.com/yavuzsel"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/aerogear/aerogear-js.git"
+  },
+  "bugs": {
+    "url": "https://issues.jboss.org/browse/AEROGEAR"
+  },
+  "licenses": [
+    {
+      "type": "Apache-2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "version": "1.3.0",
+  "main": "./aerogear.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "jquery": "1.10.x"
+  },
+  "devDependencies": {},
+  "_release": "1.3.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.3.0",
+    "commit": "87a646ce9eff0f3bbfe98bd2f38e426226e3ca30"
+  },
+  "_source": "git://github.com/aerogear/aerogear-js-dist.git",
+  "_target": "~1.3.0",
+  "_originalSource": "aerogear"
+}

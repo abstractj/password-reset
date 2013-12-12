@@ -1,10 +1,8 @@
 package org.abstractj.rest;
 
-import org.abstractj.api.ExpirationTime;
-import org.abstractj.fixture.UserService;
-import org.abstractj.model.Token;
-import org.abstractj.service.TokenService;
-import org.abstractj.util.ResponseUtil;
+import org.abstractj.api.service.TokenService;
+import org.abstractj.fixture.FakeService;
+import org.abstractj.model.Credential;
 
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -15,78 +13,41 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Properties;
+import java.util.logging.Logger;
+
+import static javax.ws.rs.core.Response.Status.NOT_FOUND;
+import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 
 @Path("/")
 public class PasswordResetEndpoint {
 
     @Inject
     private TokenService tokenService;
-    @Inject
-    private UserService userService;
-    @Inject
-    private ExpirationTime expirationTime;
+
+    private static final Logger LOGGER = Logger.getLogger(PasswordResetEndpoint.class.getSimpleName());
 
     @GET
     @Path("/forgot")
     @Produces(MediaType.APPLICATION_JSON)
     public Response forgot(@QueryParam("email") String email) {
-
-        Token token;
-
-        //Here of course we need to validate the e-mail against the database or PicketLink
-        if (userService.userExists(email)) {
-            token = tokenService.generate(new ExpirationTime());
-            userService.send(uri(token.getId()));
-        }
-        //It' base64 encoded but also can be an Hex
-        return new ResponseUtil().ok(String.format("Instructions sent to %s", email));
+        tokenService.send(email);
+        return Response.status(NO_CONTENT).build();
     }
 
     @POST
     @Path("/reset")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response reset(@QueryParam("id") String id) {
+    public Response reset(Credential credential) {
+        if (tokenService.isValid(credential.getToken()) && FakeService.update(credential)) {
 
-        Token token = tokenService.findTokenById(id);
+            tokenService.destroy(credential.getToken());
 
-        //First we check if the token is valid
-        if (tokenService.isValid(token)) {
-            //If yes, we need to redirect use to the login page
-            //After user update the password, disable that token
-            tokenService.disable(id);
-            return Response.status(Response.Status.OK)
+            return Response.status(NO_CONTENT)
                     .type(MediaType.TEXT_PLAIN)
                     .entity("Yay!").build();
         } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(NOT_FOUND).build();
         }
-    }
-
-
-    private String uri(String id) {
-        try {
-            String url = loadProperties().getProperty("config.url");
-            return String.format(url + "%s%s", "rest/reset?id=", URLEncoder.encode(id, "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
-    }
-
-    private Properties loadProperties() {
-        Properties props = new Properties();
-        InputStream in = this.getClass().getClassLoader().getResourceAsStream("META-INF/config.properties");
-        try {
-            props.load(in);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return props;
     }
 }
