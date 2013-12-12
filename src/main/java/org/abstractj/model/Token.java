@@ -14,7 +14,8 @@ public class Token {
     private Long expiration;
     private Boolean used = false;
 
-    public Token(){}
+    public Token() {
+    }
 
     public Token(String id, ExpirationTime expirationTime) {
         this.id = id;

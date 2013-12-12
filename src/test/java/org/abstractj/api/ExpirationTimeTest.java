@@ -3,11 +3,6 @@ package org.abstractj.api;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
-
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

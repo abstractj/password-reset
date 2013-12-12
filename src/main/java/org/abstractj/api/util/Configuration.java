@@ -26,7 +26,7 @@ public class Configuration {
         }
     }
 
-    public static void loadFilterConfig(FilterConfig config){
+    public static void loadFilterConfig(FilterConfig config) {
         Configuration.applicationUrl = config.getInitParameter("url");
         Configuration.redirectPage = config.getInitParameter("redirect-page");
     }
@@ -41,7 +41,7 @@ public class Configuration {
     }
 
     public static String getSecret() {
-       return props.getProperty("config.secret");
+        return props.getProperty("config.secret");
     }
 
     public static String getRedirectPage() {
