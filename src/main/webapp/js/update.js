@@ -15,13 +15,11 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
             return params;
         };
 
-        var token = parseQueryString(window.location.search).id;
-
-        console.log("Query string: " + token);
+        var token = parseQueryString( window.location.search ).id;
 
         if(token) {
 
-            var info = _.template( $("#reset-info-template").text() );
+            var info = _.template( $( "#reset-info-template" ).text() );
 
             var updatePipeline = AeroGear.Pipeline([
                 {
@@ -41,22 +39,22 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
                     },
                     {
                         success: function( data ) {
-                            console.log("Yay it works" + data);
-                            $("#update-page").html( email );
+                            console.log( "Yay it works" + data );
+                            $( "#update-page" ).html( email );
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            console.log("Oh noes! " + textStatus);
-                            console.log("\n" + errorThrown);
+                            console.log( "Oh noes! " + textStatus );
+                            console.log( "\n" + errorThrown );
                         }
                     });
             };
 
             $( "#update-button" ).click( function() {
-                var email = info( {'email': $("#email").val()}),
-                    password = info( {'password': $("#password").val()}),
-                    confirmation = info( {'confirmation': $("#confirmation").val()} );
+                var email = info( {'email': $( "#email" ).val()}),
+                    password = info( {'password': $( "#password" ).val()}),
+                    confirmation = info( {'confirmation': $( "#confirmation" ).val()} );
 
-                    update(email, password, confirmation);
+                    update( email, password, confirmation );
             });
         }
 

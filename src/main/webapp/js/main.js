@@ -1,7 +1,7 @@
 define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
   $(function(){
 
-      var info = _.template( $("#info-template").text() );
+      var info = _.template( $( "#info-template" ).text() );
 
       var forgotPipeline = AeroGear.Pipeline([
           {
@@ -14,18 +14,18 @@ define(['jquery', 'underscore', 'aerogear'], function($, _, aerogear){
 
       var forgot = function ( email ) {
         forgotPipeline.read({
-            query: {email : email},
+            query: { email : email },
             success: function( ) {
-              $("#reset-page").html( email );
+              $( "#reset-page" ).html( email );
             },
-            error: function (jqXHR, textStatus, errorThrown) {
+            error: function ( jqXHR, textStatus, errorThrown ) {
               console.log("Oh noes! " + textStatus);
             }
         });
       };
 
       $( "#reset-button" ).click( function() {
-          var email = info( {'email': $("#email").val()} );
+          var email = info( { 'email': $("#email").val() } );
           forgot ( email );
       });
 
