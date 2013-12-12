@@ -1,16 +1,17 @@
 package org.abstractj.service;
 
 import org.abstractj.api.ExpirationTime;
-import org.abstractj.api.ResetToken;
 import org.abstractj.api.service.TokenService;
-import org.abstractj.fixture.FakeUserService;
-import org.abstractj.model.Token;
 import org.abstractj.api.util.Configuration;
+import org.abstractj.fixture.FakeService;
+import org.abstractj.model.Token;
+import org.jboss.aerogear.crypto.Hmac;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import java.security.NoSuchAlgorithmException;
 import java.util.logging.Logger;
 
 @Stateless
@@ -60,12 +61,19 @@ public class TokenServiceImpl implements TokenService {
         Token token;
 
         //Here of course we need to validate the e-mail against the database or PicketLink
-        if (FakeUserService.userExists(email)) {
-            token = save(new ResetToken().create());
-            LOGGER.info("Sending password reset instructions");
-            LOGGER.info("===================================");
-            LOGGER.info(Configuration.uri(token.getId()));
-            LOGGER.info("===================================");
+        if (FakeService.userExists(email)) {
+
+            String secret = Configuration.getSecret();
+            Hmac hmac = new Hmac(secret);
+            try {
+                token = save(hmac.digest());
+                LOGGER.info("Sending password reset instructions");
+                LOGGER.info("===================================");
+                LOGGER.info(Configuration.uri(token.getId()));
+                LOGGER.info("===================================");
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -82,11 +90,6 @@ public class TokenServiceImpl implements TokenService {
         }
 
         return token;
-    }
-
-
-    private boolean isNotEmpty(String value) {
-        return value != null && !value.trim().isEmpty();
     }
 
 }
