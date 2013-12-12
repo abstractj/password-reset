@@ -19,7 +19,7 @@ public class Token {
     public Token(String id, ExpirationTime expirationTime) {
         this.id = id;
         this.sentAt = expirationTime.getCurrentTime();
-        this.expiration = expirationTime.getExpirationDate();
+        this.expiration = expirationTime.add(1);
     }
 
     public Token(String id) {

@@ -7,16 +7,9 @@ import java.util.TimeZone;
 public class ExpirationTime {
 
     private final Calendar calendar;
-    private long expirationDate;
 
     public ExpirationTime() {
         calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
-        this.expirationDate = add(1);
-    }
-
-    public ExpirationTime(int expirationDate) {
-        this();
-        this.expirationDate = add(expirationDate);
     }
 
     public long getCurrentTime() {
@@ -36,10 +29,6 @@ public class ExpirationTime {
         Calendar comparison = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
         comparison.setTimeInMillis(time);
         return comparison;
-    }
-
-    public long getExpirationDate() {
-        return expirationDate;
     }
 
 }
