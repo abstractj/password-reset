@@ -12,7 +12,6 @@ public class Token {
     private String id;
     private Long sentAt;
     private Long expiration;
-    private Boolean used = false;
 
     public Token() {
     }
@@ -52,11 +51,4 @@ public class Token {
         this.expiration = expiration;
     }
 
-    public Boolean getUsed() {
-        return used;
-    }
-
-    public void setUsed(Boolean used) {
-        this.used = true;
-    }
 }

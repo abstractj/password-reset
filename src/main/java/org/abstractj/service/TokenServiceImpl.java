@@ -29,8 +29,7 @@ public class TokenServiceImpl implements TokenService {
     public void destroy(String id) {
         try {
             Token token = em.find(Token.class, id);
-            token.setUsed(true);
-            em.merge(token);
+            em.remove(token);
             em.flush();
         } catch (Exception e) {
             e.printStackTrace();
@@ -42,9 +41,8 @@ public class TokenServiceImpl implements TokenService {
 
         Token token = null;
         try {
-            token = em.createQuery("SELECT t FROM Token t WHERE t.id = :id and t.used = :used", Token.class)
+            token = em.createQuery("SELECT t FROM Token t WHERE t.id = :id", Token.class)
                     .setParameter("id", id)
-                    .setParameter("used", false)
                     .getSingleResult();
 
         } catch (NoResultException e) {
