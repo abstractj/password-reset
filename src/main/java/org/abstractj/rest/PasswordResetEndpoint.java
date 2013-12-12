@@ -1,6 +1,7 @@
 package org.abstractj.rest;
 
 import org.abstractj.api.service.TokenService;
+import org.abstractj.fixture.FakeService;
 import org.abstractj.model.Credential;
 
 import javax.inject.Inject;
@@ -38,9 +39,9 @@ public class PasswordResetEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response reset(Credential credential) {
-        if (tokenService.isValid(credential.getToken())) {
+        if (tokenService.isValid(credential.getToken()) && FakeService.update(credential)) {
 
-            LOGGER.info("Email: " + credential.getEmail());
+            tokenService.destroy(credential.getToken());
 
             return Response.status(NO_CONTENT)
                     .type(MediaType.TEXT_PLAIN)
